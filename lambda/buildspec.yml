@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+  build:
+    commands:
+      - echo "Package Lambda"
+      - zip -r test-app-lambda.zip .
+  post_build:
+    commands:
+      - echo "Upload code to Lambda"
+      - aws lambda update-function-code --function-name test-app --zip-file fileb://test-app-lambda.zip
+      - echo "Publish new version Lambda"
+      - VERSION=$(aws lambda publish-version --function-name test-app --query Version --output text)
+      - echo "Version: $VERSION"
+      - echo "Update alias dev"
+      - aws lambda update-alias --function-name test-app --name dev --function-version $VERSION
+
+artifacts:
+  files:
+    - test-app-lambda.zip
