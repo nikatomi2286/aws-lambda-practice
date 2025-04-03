@@ -30,7 +30,6 @@ phases:
       - echo "Version = $VERSION"
       - echo "Update alias dev"
       - aws lambda update-alias --function-name test-app --name dev --function-version $VERSION
-
 artifacts:
   files:
     - test-app-lambda.zip
