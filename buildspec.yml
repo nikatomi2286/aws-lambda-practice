@@ -14,15 +14,15 @@ phases:
       - aws lambda update-function-code --function-name test-app --zip-file fileb://test-app-lambda.zip
       - |
         while true; do
-        # Проверяем, активна ли новая версия Lambda
-        STATUS=$(aws lambda get-function --function-name test-app --query 'Configuration.State' --output text)
-        if [ "$STATUS" == "Active" ]; then
-        echo "Lambda function is now active and updated."
-        break
-        else
-        echo "Waiting for Lambda function to become active. Current state: $STATUS"
-        sleep 30  # Задержка 30 секунд перед повторной проверкой
-        fi
+          # Проверяем, активна ли новая версия Lambda
+          STATUS=$(aws lambda get-function --function-name test-app --query 'Configuration.State' --output text)
+          if [ "$STATUS" == "Active" ]; then
+            echo "Lambda function is now active and updated."
+            break
+          else
+            echo "Waiting for Lambda function to become active. Current state: $STATUS"
+            sleep 30  # Задержка 30 секунд перед повторной проверкой
+          fi
         done
       - echo "Publish new version Lambda"
       - VERSION=$(aws lambda publish-version --function-name test-app --query Version --output text)
