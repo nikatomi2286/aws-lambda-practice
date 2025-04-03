@@ -4,6 +4,8 @@ Resources:
       Type: AWS::Lambda::Function
       Properties:
         Name: "test-app"
-        Alias: "dev"
-        CurrentVersion: "1"
-        TargetVersion: "2"
+        Alias: "test"
+        CurrentVersion: "test"
+        TargetVersion: "dev"
+Deployment:
+  LambdaDeploymentConfigName: "AllAtOnce"
