@@ -17,7 +17,7 @@ phases:
           # Проверяем, активна ли новая версия Lambda
           STATUS=$(aws lambda get-function --function-name test-app --query 'Configuration.State' --output text)
           echo "status = $STATUS"
-          if [ "$STATUS" == "Active" ]; then
+          if [ "$STATUS" = "Active" ]; then
             echo "Lambda function is now active and updated."
             break
           else
