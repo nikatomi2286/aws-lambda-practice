@@ -1,0 +1,36 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+  build:
+    commands:
+      - echo "Package Lambda"
+      - zip -r test-app-lambda.zip .
+  post_build:
+    commands:
+      - echo "Upload code to Lambda"
+      - aws lambda update-function-code --function-name test-app --zip-file fileb://test-app-lambda.zip
+      - |
+        while true; do
+          # Проверяем, активна ли новая версия Lambda
+          STATUS=$(aws lambda get-function --function-name test-app --query 'Configuration.State' --output text)
+          echo "status = $STATUS"
+          if [ "$STATUS" = "Active" ]; then
+            echo "Lambda function is now active and updated."
+            break
+          else
+            echo "Waiting for Lambda function to become active. Current state: $STATUS"
+            sleep 30  # Задержка 30 секунд перед повторной проверкой
+          fi
+        done
+      - echo "Publish new version Lambda"
+      - VERSION=$(aws lambda publish-version --function-name test-app --query Version --output text)
+      - echo "Version = $VERSION"
+      - echo "Update alias dev"
+      - aws lambda update-alias --function-name test-app --name dev --function-version $VERSION
+
+artifacts:
+  files:
+    - test-app-lambda.zip
