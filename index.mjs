@@ -3,7 +3,7 @@ export const handler = async (event, context) => {
     console.log(context);
     return {
         statusCode: 200,
-        body: { name: 'Andrei', env: '!!! DEV !!!' },
+        body: JSON.stringify({ name: 'Andrei', env: '!!! DEV !!!' }),
         headers: {
             'content-type': 'application/json',
         }
