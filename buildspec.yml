@@ -34,3 +34,5 @@ phases:
 artifacts:
   files:
     - test-app-lambda.zip
+  discard-paths: yes
+  base-directory: .
